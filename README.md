@@ -1,13 +1,10 @@
-# drone-rover-search-rescue
-Cooperative drone and ground robot team for search and rescue in a forest: the drone finds a missing person and the ground robot navigates to its position with Nav2. ROS 2.
-<img width="1786" height="1003" alt="image" src="https://github.com/user-attachments/assets/2ea39910-a454-4f4a-a337-9da3c583acb4" />
 # Drone–Rover Search and Rescue
 
 A cooperative drone and ground robot team for search and rescue in a forest. The drone flies over the area and detects a lost person, then shares her position. The ground robot sets a Nav2 goal near that position and drives there while avoiding obstacles.
 
 Everything runs in simulation: PX4 SITL and Gazebo for the drone, ROS 2 and Nav2 for the ground robot.
 
-![Drone and rover search demo](docs/demo.png)
+<img width="1786" height="1003" alt="image" src="https://github.com/user-attachments/assets/2ea39910-a454-4f4a-a337-9da3c583acb4" />
 
 ## Scenario
 

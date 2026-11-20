@@ -35,8 +35,6 @@ Drone (PX4 + Gazebo)                       Ground robot (ROS 2 + Nav2)
                               navigation with obstacle avoidance
 ```
 
-> TODO: explain how the drone position is converted into the ground robot's map frame.
-
 ## Stack
 
 ROS 2 Humble, Nav2, SLAM Toolbox, PX4 SITL, Gazebo Harmonic, Micro XRCE-DDS, MAVSDK, YOLOv8 (Ultralytics), RViz

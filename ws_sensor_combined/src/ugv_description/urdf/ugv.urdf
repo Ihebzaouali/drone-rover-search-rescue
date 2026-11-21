@@ -1,0 +1,325 @@
+<?xml version="1.0"?>
+<!--
+  UGV Robot Description (URDF)
+  Generated from default.sdf
+
+  Link tree:
+    base_link
+    ├── camera_link   (fixed)
+    ├── lidar_link    (fixed)
+    ├── fl_wheel      (continuous, front-left)
+    ├── fr_wheel      (continuous, front-right)
+    ├── rl_wheel      (continuous, rear-left)
+    └── rr_wheel      (continuous, rear-right)
+
+  Note: The odom → base_link transform is NOT part of the URDF.
+  It is published at runtime by the DiffDrive plugin via the /tf bridge.
+-->
+<robot name="ugv">
+
+  <!-- ============================================================ -->
+  <!--  MATERIALS                                                    -->
+  <!-- ============================================================ -->
+  <material name="dark_gray">  <color rgba="0.15 0.15 0.15 1"/> </material>
+  <material name="orange">     <color rgba="1.0  0.4  0.0  1"/> </material>
+  <material name="white">      <color rgba="1.0  1.0  1.0  1"/> </material>
+  <material name="blue">       <color rgba="0.0  0.5  1.0  1"/> </material>
+  <material name="gray">       <color rgba="0.5  0.5  0.5  1"/> </material>
+  <material name="red_lidar">  <color rgba="0.8  0.0  0.0  1"/> </material>
+  <material name="tire_black"> <color rgba="0.05 0.05 0.05 1"/> </material>
+  <material name="rim_silver"> <color rgba="0.6  0.6  0.6  1"/> </material>
+
+  <!-- ============================================================ -->
+  <!--  BASE LINK                                                    -->
+  <!--  The main chassis of the UGV.                                -->
+  <!--  In the SDF the chassis has two visual boxes and headlights. -->
+  <!--  We keep all of them so RViz renders the robot faithfully.   -->
+  <!-- ============================================================ -->
+  <link name="base_link">
+
+    <!-- Lower dark chassis body -->
+    <visual>
+      <origin xyz="0 0 -0.05" rpy="0 0 0"/>
+      <geometry><box size="0.8 0.42 0.1"/></geometry>
+      <material name="dark_gray"/>
+    </visual>
+
+    <!-- Upper orange deck -->
+    <visual>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <geometry><box size="0.6 0.42 0.05"/></geometry>
+      <material name="orange"/>
+    </visual>
+
+    <!-- Right headlight -->
+    <visual>
+      <origin xyz="0.401 0.15 -0.05" rpy="0 0 0"/>
+      <geometry><box size="0.01 0.06 0.04"/></geometry>
+      <material name="white"/>
+    </visual>
+
+    <!-- Left headlight -->
+    <visual>
+      <origin xyz="0.401 -0.15 -0.05" rpy="0 0 0"/>
+      <geometry><box size="0.01 0.06 0.04"/></geometry>
+      <material name="white"/>
+    </visual>
+
+    <!-- Collision box encompasses the whole chassis height -->
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.8 0.42 0.2"/></geometry>
+    </collision>
+
+    <!--
+      Inertial: 30 kg chassis.
+      The SDF has an unusual pose (0 0 -0.5) for the CoM — kept as-is
+      so simulation behaviour matches your working SDF.
+    -->
+    <inertial>
+      <origin xyz="0 0 -0.5" rpy="0 0 0"/>
+      <mass value="30"/>
+      <inertia ixx="2.0" ixy="0.0" ixz="0.0"
+                         iyy="2.0" iyz="0.0"
+                                   izz="2.0"/>
+    </inertial>
+
+  </link>
+
+  <!-- ============================================================ -->
+  <!--  CAMERA LINK                                                  -->
+  <!--  Mounted at the front of the robot, slightly above chassis.  -->
+  <!--  Fixed joint — no relative motion.                           -->
+  <!-- ============================================================ -->
+  <link name="camera_link">
+
+    <!-- Camera body housing -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.04 0.08 0.04"/></geometry>
+      <material name="dark_gray"/>
+    </visual>
+
+    <!-- Camera lens (small blue cylinder facing forward) -->
+    <!-- Lens pose in SDF: xyz="0.02 0 0" rpy="0 1.5707 0" -->
+    <visual>
+      <origin xyz="0.02 0 0" rpy="0 1.5707 0"/>
+      <geometry><cylinder radius="0.015" length="0.005"/></geometry>
+      <material name="blue"/>
+    </visual>
+
+    <!-- Negligible inertia — camera is very light -->
+    <inertial>
+      <mass value="0.05"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0"
+                            iyy="0.0001" iyz="0"
+                                         izz="0.0001"/>
+    </inertial>
+
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="camera_link"/>
+    <!-- Matches <pose>0.4 0 0.08 0 0 0</pose> in SDF -->
+    <origin xyz="0.4 0 0.08" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ============================================================ -->
+  <!--  LIDAR LINK                                                   -->
+  <!--  360° LiDAR on top of the chassis.                           -->
+  <!--  Fixed joint — scanning is done by the sensor, not by motion.-->
+  <!-- ============================================================ -->
+  <link name="lidar_link">
+
+    <!-- Mast post below the scanner head -->
+    <visual>
+      <origin xyz="0 0 -0.05" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.015" length="0.1"/></geometry>
+      <material name="gray"/>
+    </visual>
+
+    <!-- Main lidar base disc -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.04" length="0.03"/></geometry>
+      <material name="dark_gray"/>
+    </visual>
+
+    <!-- Red spinning scanner cap -->
+    <visual>
+      <origin xyz="0 0 0.02" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.035" length="0.02"/></geometry>
+      <material name="red_lidar"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.04" length="0.05"/></geometry>
+    </collision>
+
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0" ixz="0"
+                           iyy="0.001" iyz="0"
+                                       izz="0.001"/>
+    </inertial>
+
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="lidar_link"/>
+    <!-- Matches <pose>0 0 0.15 0 0 0</pose> in SDF -->
+    <origin xyz="0 0 0.15" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ============================================================ -->
+  <!--  WHEEL LINKS AND JOINTS                                       -->
+  <!--                                                               -->
+  <!--  All four wheels share the same geometry (cylinder r=0.15,   -->
+  <!--  length=0.1) and are "continuous" joints (unbounded revolute).-->
+  <!--                                                               -->
+  <!--  Key axis note:                                               -->
+  <!--  In the SDF the wheel link is rotated -π/2 around X so the   -->
+  <!--  cylinder lies on its side. The joint axis is "0 0 1" in the  -->
+  <!--  child (wheel) frame. After that -π/2 rotation, local Z maps  -->
+  <!--  to +Y in the parent frame — exactly the correct spin axis    -->
+  <!--  for a differential-drive wheel.                              -->
+  <!--  We preserve the rpy="-1.5707 0 0" in the joint origin AND   -->
+  <!--  keep axis xyz="0 0 1" (child frame), matching the SDF.      -->
+  <!--                                                               -->
+  <!--  Collision uses a sphere (same as SDF) to avoid axis-aligned  -->
+  <!--  box edge artifacts with the ground plane.                    -->
+  <!-- ============================================================ -->
+
+  <!-- --- Front-Left Wheel --- -->
+  <link name="fl_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.15" length="0.1"/></geometry>
+      <material name="tire_black"/>
+    </visual>
+    <visual>  <!-- silver rim -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.08" length="0.102"/></geometry>
+      <material name="rim_silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="0.15"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <!-- Solid cylinder: Ixx=Iyy=m(3r²+h²)/12, Izz=mr²/2 -->
+      <inertia ixx="0.00844" ixy="0" ixz="0"
+                             iyy="0.00844" iyz="0"
+                                           izz="0.01125"/>
+    </inertial>
+  </link>
+
+  <joint name="fl_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child  link="fl_wheel"/>
+    <origin xyz="0.25 0.32 -0.1" rpy="-1.5707 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.2" friction="0.0"/>
+  </joint>
+
+  <!-- --- Front-Right Wheel --- -->
+  <link name="fr_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.15" length="0.1"/></geometry>
+      <material name="tire_black"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.08" length="0.102"/></geometry>
+      <material name="rim_silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="0.15"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.00844" ixy="0" ixz="0"
+                             iyy="0.00844" iyz="0"
+                                           izz="0.01125"/>
+    </inertial>
+  </link>
+
+  <joint name="fr_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child  link="fr_wheel"/>
+    <origin xyz="0.25 -0.32 -0.1" rpy="-1.5707 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.2" friction="0.0"/>
+  </joint>
+
+  <!-- --- Rear-Left Wheel --- -->
+  <link name="rl_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.15" length="0.1"/></geometry>
+      <material name="tire_black"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.08" length="0.102"/></geometry>
+      <material name="rim_silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="0.15"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.00844" ixy="0" ixz="0"
+                             iyy="0.00844" iyz="0"
+                                           izz="0.01125"/>
+    </inertial>
+  </link>
+
+  <joint name="rl_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child  link="rl_wheel"/>
+    <origin xyz="-0.25 0.32 -0.1" rpy="-1.5707 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.2" friction="0.0"/>
+  </joint>
+
+  <!-- --- Rear-Right Wheel --- -->
+  <link name="rr_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.15" length="0.1"/></geometry>
+      <material name="tire_black"/>
+    </visual>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.08" length="0.102"/></geometry>
+      <material name="rim_silver"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="0.15"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.00844" ixy="0" ixz="0"
+                             iyy="0.00844" iyz="0"
+                                           izz="0.01125"/>
+    </inertial>
+  </link>
+
+  <joint name="rr_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child  link="rr_wheel"/>
+    <origin xyz="-0.25 -0.32 -0.1" rpy="-1.5707 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.2" friction="0.0"/>
+  </joint>
+
+</robot>

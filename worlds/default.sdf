@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.9">
+  <world name="default">
+    <physics type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>250</real_time_update_rate>
+    </physics>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type="adiabatic"/>
+    <scene>
+      <grid>false</grid>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>1 1</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>500 500</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>0 0 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <light name="sunUTC" type="directional">
+      <pose>0 0 500 0 -0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>1</intensity>
+      <direction>0.001 0.625 -0.78</direction>
+      <diffuse>0.904 0.904 0.904 1</diffuse>
+      <specular>0.271 0.271 0.271 1</specular>
+      <attenuation>
+        <range>2000</range>
+        <linear>0</linear>
+        <constant>1</constant>
+        <quadratic>0</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>47.397971057728974</latitude_deg>
+      <longitude_deg> 8.546163739800146</longitude_deg>
+      <elevation>0</elevation>
+    </spherical_coordinates>
+
+    <model name="mur_gauche">
+      <static>true</static><pose>12 2 0.25 0 0 0</pose>
+      <link name="link"><collision name="col"><geometry><box><size>25 0.2 0.5</size></box></geometry></collision>
+      <visual name="vis"><geometry><box><size>25 0.2 0.5</size></box></geometry><material><ambient>0.8 0.8 0.8 1</ambient><diffuse>0.8 0.8 0.8 1</diffuse></material></visual></link>
+    </model>
+
+    <model name="mur_droit">
+      <static>true</static><pose>12 -2 0.25 0 0 0</pose>
+      <link name="link"><collision name="col"><geometry><box><size>25 0.2 0.5</size></box></geometry></collision>
+      <visual name="vis"><geometry><box><size>25 0.2 0.5</size></box></geometry><material><ambient>0.8 0.8 0.8 1</ambient><diffuse>0.8 0.8 0.8 1</diffuse></material></visual></link>
+    </model>
+
+    <model name="obs_cylindre">
+      <static>true</static><pose>6 0.5 0.5 0 0 0</pose>
+      <link name="link"><collision name="col"><geometry><cylinder><radius>0.4</radius><length>1.0</length></cylinder></geometry></collision>
+      <visual name="vis"><geometry><cylinder><radius>0.4</radius><length>1.0</length></cylinder></geometry><material><ambient>1 1 0 1</ambient><diffuse>1 1 0 1</diffuse></material></visual></link>
+    </model>
+
+    <model name="obs_bloc_bleu">
+      <static>true</static><pose>10 -0.8 0.5 0 0 0</pose>
+      <link name="link"><collision name="col"><geometry><box><size>1 1.5 1</size></box></geometry></collision>
+      <visual name="vis"><geometry><box><size>1 1.5 1</size></box></geometry><material><ambient>0 0.5 1 1</ambient><diffuse>0 0.5 1 1</diffuse></material></visual></link>
+    </model>
+
+    <model name="obs_bloc_rouge">
+      <static>true</static>
+      <pose>16 0.8 1.0 0 0 0</pose> <link name="link">
+        <collision name="col"><geometry><box><size>2.0 2.0 2.0</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>2.0 2.0 2.0</size></box></geometry><material><ambient>1 0 0 1</ambient><diffuse>1 0 0 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <model name="drone_tour">
+      <static>true</static><pose>5 5 5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><cylinder><radius>0.6</radius><length>10.0</length></cylinder></geometry></collision>
+        <visual name="vis"><geometry><cylinder><radius>0.6</radius><length>10.0</length></cylinder></geometry><material><ambient>0 1 0 1</ambient><diffuse>0 0.8 0 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <model name="drone_arche_pilier_g">
+      <static>true</static><pose>12 4 4 0 0 0</pose>
+      <link name="link"><collision name="col"><geometry><box><size>1 1 8</size></box></geometry></collision><visual name="vis"><geometry><box><size>1 1 8</size></box></geometry><material><ambient>0.5 0.2 0 1</ambient><diffuse>0.5 0.2 0 1</diffuse></material></visual></link>
+    </model>
+   
+    <model name="drone_arche_pilier_d">
+      <static>true</static><pose>12 -4 4 0 0 0</pose>
+      <link name="link"><collision name="col"><geometry><box><size>1 1 8</size></box></geometry></collision><visual name="vis"><geometry><box><size>1 1 8</size></box></geometry><material><ambient>0.5 0.2 0 1</ambient><diffuse>0.5 0.2 0 1</diffuse></material></visual></link>
+    </model>
+   
+    <model name="drone_arche_toit">
+      <static>true</static><pose>12 0 8.5 0 0 0</pose>
+      <link name="link"><collision name="col"><geometry><box><size>1 9 1</size></box></geometry></collision><visual name="vis"><geometry><box><size>1 9 1</size></box></geometry><material><ambient>0.8 0.4 0 1</ambient><diffuse>0.8 0.4 0 1</diffuse></material></visual></link>
+    </model>
+
+    <model name="drone_cube_volant">
+      <static>true</static><pose>18 0 6 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>2.5 2.5 2.5</size></box></geometry></collision>
+        <visual name="vis"><geometry><box><size>2.5 2.5 2.5</size></box></geometry><material><ambient>0.6 0 0.8 1</ambient><diffuse>0.6 0 0.8 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <model name='ugv'>
+      <pose>2 0 0.3 0 0 0</pose>
+     
+      <link name='base_link'>
+        <visual name='base_visual'>
+          <pose>0 0 -0.05 0 0 0</pose>
+          <geometry><box><size>0.8 0.42 0.1</size></box></geometry>
+          <material><ambient>0.15 0.15 0.15 1</ambient><diffuse>0.15 0.15 0.15 1</diffuse></material>
+        </visual>
+       
+        <visual name='top_visual'>
+          <pose>0 0 0.025 0 0 0</pose>
+          <geometry><box><size>0.6 0.42 0.05</size></box></geometry>
+          <material><ambient>1.0 0.4 0.0 1</ambient><diffuse>1.0 0.4 0.0 1</diffuse></material>
+        </visual>
+
+        <visual name='headlight_right'>
+          <pose>0.401 0.15 -0.05 0 0 0</pose>
+          <geometry><box><size>0.01 0.06 0.04</size></box></geometry>
+          <material>
+            <ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse><emissive>1 1 1 1</emissive>
+          </material>
+        </visual>
+
+        <visual name='headlight_left'>
+          <pose>0.401 -0.15 -0.05 0 0 0</pose>
+          <geometry><box><size>0.01 0.06 0.04</size></box></geometry>
+          <material>
+            <ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse><emissive>1 1 1 1</emissive>
+          </material>
+        </visual>
+
+        <collision name='collision'>
+          <geometry><box><size>0.8 0.42 0.2</size></box></geometry>
+        </collision>
+        <inertial>
+          <pose>0 0 -0.5 0 0 0</pose>
+          <mass>30</mass>
+          <inertia><ixx>2.0</ixx><iyy>2.0</iyy><izz>2.0</izz></inertia>
+        </inertial>
+        <sensor name='imu_sensor' type='imu'>
+          <always_on>1</always_on><update_rate>50</update_rate><topic>/model/ugv/imu</topic>
+        </sensor>
+      </link>
+
+      <link name='camera_link'>
+        <pose>0.4 0 0.08 0 0 0</pose>
+        <visual name='cam_body'>
+          <geometry><box><size>0.04 0.08 0.04</size></box></geometry>
+          <material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse></material>
+        </visual>
+        <visual name='cam_lens'>
+          <pose>0.02 0 0 0 1.5707 0</pose>
+          <geometry><cylinder><radius>0.015</radius><length>0.005</length></cylinder></geometry>
+          <material><ambient>0 0.5 1 1</ambient><diffuse>0 0.5 1 1</diffuse></material>
+        </visual>
+        <sensor name='camera' type='camera'>
+          <camera>
+            <horizontal_fov>1.047</horizontal_fov>
+            <image><width>640</width><height>480</height></image>
+            <clip><near>0.1</near><far>100</far></clip>
+          </camera>
+          <always_on>1</always_on><update_rate>30</update_rate><topic>/model/ugv/camera</topic><visualize>true</visualize>
+        </sensor>
+      </link>
+      <joint name='camera_joint' type='fixed'><parent>base_link</parent><child>camera_link</child></joint>
+
+      <link name='fl_wheel'>
+        <pose>0.25 0.32 -0.1 -1.5707 0 0</pose>
+        <visual name='tire'><geometry><cylinder><radius>0.15</radius><length>0.1</length></cylinder></geometry>
+        <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material></visual>
+        <visual name='rim'><geometry><cylinder><radius>0.08</radius><length>0.102</length></cylinder></geometry>
+        <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material></visual>
+        <collision name='collision'><geometry><sphere><radius>0.15</radius></sphere></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>0.1</mu2></ode></friction><contact><ode><kp>10000.0</kp><kd>100.0</kd><min_depth>0.005</min_depth></ode></contact></surface></collision>
+        <inertial><mass>1</mass></inertial>
+      </link>
+      <joint name='fl_wheel_joint' type='revolute'><parent>base_link</parent><child>fl_wheel</child><axis><xyz>0 0 1</xyz><dynamics><damping>0.2</damping></dynamics></axis></joint>
+
+      <link name='fr_wheel'>
+        <pose>0.25 -0.32 -0.1 -1.5707 0 0</pose>
+        <visual name='tire'><geometry><cylinder><radius>0.15</radius><length>0.1</length></cylinder></geometry>
+        <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material></visual>
+        <visual name='rim'><geometry><cylinder><radius>0.08</radius><length>0.102</length></cylinder></geometry>
+        <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material></visual>
+        <collision name='collision'><geometry><sphere><radius>0.15</radius></sphere></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>0.1</mu2></ode></friction><contact><ode><kp>10000.0</kp><kd>100.0</kd><min_depth>0.005</min_depth></ode></contact></surface></collision>
+        <inertial><mass>1</mass></inertial>
+      </link>
+      <joint name='fr_wheel_joint' type='revolute'><parent>base_link</parent><child>fr_wheel</child><axis><xyz>0 0 1</xyz><dynamics><damping>0.2</damping></dynamics></axis></joint>
+
+      <link name='rl_wheel'>
+        <pose>-0.25 0.32 -0.1 -1.5707 0 0</pose>
+        <visual name='tire'><geometry><cylinder><radius>0.15</radius><length>0.1</length></cylinder></geometry>
+        <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material></visual>
+        <visual name='rim'><geometry><cylinder><radius>0.08</radius><length>0.102</length></cylinder></geometry>
+        <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material></visual>
+        <collision name='collision'><geometry><sphere><radius>0.15</radius></sphere></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>0.1</mu2></ode></friction><contact><ode><kp>10000.0</kp><kd>100.0</kd><min_depth>0.005</min_depth></ode></contact></surface></collision>
+        <inertial><mass>1</mass></inertial>
+      </link>
+      <joint name='rl_wheel_joint' type='revolute'><parent>base_link</parent><child>rl_wheel</child><axis><xyz>0 0 1</xyz><dynamics><damping>0.2</damping></dynamics></axis></joint>
+
+      <link name='rr_wheel'>
+        <pose>-0.25 -0.32 -0.1 -1.5707 0 0</pose>
+        <visual name='tire'><geometry><cylinder><radius>0.15</radius><length>0.1</length></cylinder></geometry>
+        <material><ambient>0.05 0.05 0.05 1</ambient><diffuse>0.05 0.05 0.05 1</diffuse></material></visual>
+        <visual name='rim'><geometry><cylinder><radius>0.08</radius><length>0.102</length></cylinder></geometry>
+        <material><ambient>0.6 0.6 0.6 1</ambient><diffuse>0.6 0.6 0.6 1</diffuse></material></visual>
+        <collision name='collision'><geometry><sphere><radius>0.15</radius></sphere></geometry>
+        <surface><friction><ode><mu>1.0</mu><mu2>0.1</mu2></ode></friction><contact><ode><kp>10000.0</kp><kd>100.0</kd><min_depth>0.005</min_depth></ode></contact></surface></collision>
+        <inertial><mass>1</mass></inertial>
+      </link>
+      <joint name='rr_wheel_joint' type='revolute'><parent>base_link</parent><child>rr_wheel</child><axis><xyz>0 0 1</xyz><dynamics><damping>0.2</damping></dynamics></axis></joint>
+
+      <link name='lidar_link'>
+        <pose>0 0 0.15 0 0 0</pose>
+        <visual name='mast'>
+          <pose>0 0 -0.05 0 0 0</pose>
+          <geometry><cylinder><radius>0.015</radius><length>0.1</length></cylinder></geometry>
+          <material><ambient>0.5 0.5 0.5 1</ambient><diffuse>0.5 0.5 0.5 1</diffuse></material>
+        </visual>
+        <visual name='lidar_base'>
+          <geometry><cylinder><radius>0.04</radius><length>0.03</length></cylinder></geometry>
+          <material><ambient>0.1 0.1 0.1 1</ambient><diffuse>0.1 0.1 0.1 1</diffuse></material>
+        </visual>
+        <visual name='lidar_scanner'>
+          <pose>0 0 0.02 0 0 0</pose>
+          <geometry><cylinder><radius>0.035</radius><length>0.02</length></cylinder></geometry>
+          <material><ambient>0.8 0 0 1</ambient><diffuse>0.8 0 0 1</diffuse></material>
+        </visual>
+
+        <collision name='collision'><geometry><cylinder><radius>0.04</radius><length>0.05</length></cylinder></geometry></collision>
+        <inertial><mass>0.5</mass></inertial>
+        <sensor name='gpu_lidar' type='gpu_lidar'>
+          <update_rate>10</update_rate><topic>/model/ugv/lidar</topic>
+          <ray>
+            <scan><horizontal><samples>360</samples><resolution>1</resolution><min_angle>-3.14159</min_angle><max_angle>3.14159</max_angle></horizontal></scan>
+            <range><min>0.15</min><max>10.0</max><resolution>0.01</resolution></range>
+          </ray>
+          <always_on>1</always_on><visualize>true</visualize>
+        </sensor>
+      </link>
+      <joint name='lidar_joint' type='fixed'><parent>base_link</parent><child>lidar_link</child></joint>
+     
+      <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/PatientWheelChair</uri>
+      <name>personne_fauteuil</name>
+      <pose>18.0 0.8 -0.3 0 0 3.14159</pose> </include>
+
+      <plugin filename="libignition-gazebo-diff-drive-system.so" name="ignition::gazebo::systems::DiffDrive">
+        <left_joint>fl_wheel_joint</left_joint>
+        <left_joint>rl_wheel_joint</left_joint>
+        <right_joint>fr_wheel_joint</right_joint>
+        <right_joint>rr_wheel_joint</right_joint>
+        <wheel_separation>0.64</wheel_separation>
+        <wheel_radius>0.15</wheel_radius>
+        <topic>cmd_vel</topic>
+        <odom_publish_frequency>50</odom_publish_frequency>
+        <frame_id>odom</frame_id>
+        <child_frame_id>base_link</child_frame_id>
+        <publish_odom_tf>false</publish_odom_tf>
+        <publish_wheel_tf>true</publish_wheel_tf>
+      </plugin>
+      
+      <plugin filename="ignition-gazebo-joint-state-publisher-system" 
+              name="ignition::gazebo::systems::JointStatePublisher">
+        <topic>joint_states</topic>
+      </plugin>
+    </model>
+  </world>
+</sdf>

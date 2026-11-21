@@ -341,7 +341,12 @@ Fly the drone toward the person. When `drone_vision` detects her, `person_locato
 - The goal is sent exactly at that position. Nav2 rejects it if it falls inside an obstacle on the costmap, and the rover ignores new detections while it is navigating.
 - Detection is class-based (`person`, YOLOv8n, confidence 0.25), so any person in view triggers the mission.
 
+## License
+ 
+Released under the [MIT License](LICENSE).
+ 
 ## Acknowledgments and licenses
-
+ 
 - [PX4-Autopilot](https://github.com/PX4/PX4-Autopilot), [px4_msgs](https://github.com/PX4/px4_msgs), [px4_ros_com](https://github.com/PX4/px4_ros_com), [Micro XRCE-DDS Agent](https://github.com/eProsima/Micro-XRCE-DDS-Agent), ROS 2 and Nav2
 - Object detection uses [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics), which has its own license terms. Check them before reusing this project.
+

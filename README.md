@@ -340,7 +340,6 @@ Fly the drone toward the person. When `drone_vision` detects her, `person_locato
 - The spawn-point offset between the drone and the rover is a constant in `person_locator_node.py`, not read from Gazebo. In RViz, set the initial pose at the rover's spawn pose, which is the map origin `(0, 0)` with yaw 0.
 - The goal is sent exactly at that position. Nav2 rejects it if it falls inside an obstacle on the costmap, and the rover ignores new detections while it is navigating.
 - Detection is class-based (`person`, YOLOv8n, confidence 0.25), so any person in view triggers the mission.
-- `drone_ugv_mission/config/mission_config.yaml` is not loaded by `mission.launch.py`: the topic names and the 3 s cooldown are constants in the node files.
 
 ## Acknowledgments and licenses
 

@@ -43,7 +43,7 @@ Drone (PX4 + Gazebo)                          Ground robot (ROS 2 + Nav2)
 
 1. `drone_vision` runs YOLOv8 on the drone camera and publishes `True` on `/drone/person_detected` for every frame in which a `person` is detected (`False` otherwise).
 2. `person_locator` reads the drone position from PX4 (local frame, NED). On a detection it converts the position to ENU (`x_enu = y_ned`, `y_enu = x_ned`) and publishes it as a `PoseStamped` in the `map` frame on `/detected_person_pose`, at most once every 3 seconds.
-3. The person is assumed to be on the ground directly below the drone, so the published position is the drone's horizontal position when the detection fires. The drone should therefore be hovering above the person with the camera pointing down.
+3. The published position is the drone's own horizontal position when the detection fires. The code assumes the person is directly below the drone, but the drone's camera is fixed and faces forward (no gimbal), so she is actually ahead of the drone when she is detected. The rover therefore goes to the point below the drone. Stop the drone close to her to keep this error small.
 4. `robot_mission` sends this pose to Nav2 as a `NavigateToPose` goal. While a goal is active, new detections are ignored.
 
 > **Frame offset:** PX4's local frame starts at the drone's spawn point, while the Nav2 `map` frame starts at the rover's start pose. In the provided world the drone spawns at `(0, 0)` and the rover at `(2, 0)`, so `person_locator` subtracts this 2 m offset (`DRONE_SPAWN_*` and `UGV_SPAWN_*` constants in `person_locator_node.py`). Update these constants if you move the spawn points. Both robots are assumed to start with yaw 0.
@@ -148,20 +148,9 @@ source install/setup.bash
 
 Use the `px4_msgs` branch that matches your PX4-Autopilot version. `person_locator` subscribes to `/fmu/out/vehicle_local_position_v1`: if your PX4 version publishes the topic under another name (for example without the `_v1` suffix), update it in `person_locator_node.py`.
 
-### 8. Gazebo models and drone with depth camera
+### 8. Drone with depth camera
 
-This project uses the simulation setup from [PX4-ROS2-Gazebo-YOLOv8](https://github.com/monemati/PX4-ROS2-Gazebo-YOLOv8) (the drone model with a depth camera and the Gazebo models).
-
-```bash
-cd ~
-git clone https://github.com/monemati/PX4-ROS2-Gazebo-YOLOv8.git
-mkdir -p ~/.gz/models
-cp -r PX4-ROS2-Gazebo-YOLOv8/models/* ~/.gz/models/
-echo "export GZ_SIM_RESOURCE_PATH=~/.gz/models" >> ~/.bashrc
-source ~/.bashrc
-```
-
-Then replace the content of `~/PX4-Autopilot/Tools/simulation/gz/models/x500_depth/model.sdf` with:
+Replace the content of `~/PX4-Autopilot/Tools/simulation/gz/models/x500_depth/model.sdf` with:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -310,7 +299,7 @@ python3 ~/drone-rover-search-rescue/scripts/control_drone.py
 
 The keys follow an AZERTY keyboard layout. Speed limits are 2 m/s horizontally, 1.2 m/s vertically and 45°/s in yaw. The dashboard shows the drone status, the current velocities and whether offboard mode is active. The pygame window must have focus to receive the key presses.
 
-Fly over the person and hover above her with the camera pointing down. When `drone_vision` detects her, `person_locator` publishes the goal and the rover starts navigating; the `robot_mission` terminal logs the goal, the remaining distance and the result.
+Fly the drone toward the person. When `drone_vision` detects her, `person_locator` publishes the goal and the rover starts navigating; the `robot_mission` terminal logs the goal, the remaining distance and the result.
 
 ### Main topics
 
@@ -347,7 +336,7 @@ Fly over the person and hover above her with the camera pointing down. When `dro
 
 - Runs in simulation only, with no tests on real robots.
 - Only the direction drone → rover is implemented. The rover cannot send a position to the drone yet.
-- The person's position is the drone's position at the time of detection (no 3D back-projection from the image), and the frame offset is a fixed constant (see above).
+- The person's position is the drone's position at the time of detection (no 3D back-projection from the image). The camera faces forward, so she is ahead of that point, and the frame offset is a fixed constant (see above).
 - The spawn-point offset between the drone and the rover is a constant in `person_locator_node.py`, not read from Gazebo. In RViz, set the initial pose at the rover's spawn pose, which is the map origin `(0, 0)` with yaw 0.
 - The goal is sent exactly at that position. Nav2 rejects it if it falls inside an obstacle on the costmap, and the rover ignores new detections while it is navigating.
 - Detection is class-based (`person`, YOLOv8n, confidence 0.25), so any person in view triggers the mission.
@@ -355,6 +344,5 @@ Fly over the person and hover above her with the camera pointing down. When `dro
 
 ## Acknowledgments and licenses
 
-- Drone and Gazebo simulation setup: [monemati/PX4-ROS2-Gazebo-YOLOv8](https://github.com/monemati/PX4-ROS2-Gazebo-YOLOv8)
 - [PX4-Autopilot](https://github.com/PX4/PX4-Autopilot), [px4_msgs](https://github.com/PX4/px4_msgs), [px4_ros_com](https://github.com/PX4/px4_ros_com), [Micro XRCE-DDS Agent](https://github.com/eProsima/Micro-XRCE-DDS-Agent), ROS 2 and Nav2
 - Object detection uses [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics), which has its own license terms. Check them before reusing this project.

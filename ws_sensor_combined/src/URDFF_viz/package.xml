@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>URDFF_viz</name>
+  <version>1.0.0</version>
+  <description>Visualization launchers and RViz configs for URDFF robot.</description>
+  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Runtime dependencies -->
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <exec_depend>rqt_robot_monitor</exec_depend>
+  
+  <!-- Optional: Add if you have a separate URDF package -->
+  <!-- <exec_depend>URDFF_description</exec_depend> -->
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

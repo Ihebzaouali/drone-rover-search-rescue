@@ -69,6 +69,14 @@ OUTPUT_TOPIC = '/detected_person_pose'
 # Prevents the robot from being spammed if detection fires every frame.
 PUBLISH_COOLDOWN_SEC = 3.0
 
+# Spawn points in the Gazebo world frame (x, y) in metres, from worlds/default.sdf.
+# PX4's local frame starts at the drone's spawn point, while the Nav2 map frame
+# starts at the ground robot's start pose.  The difference between the two
+# origins is removed from the published position.
+# Change these values if you move the spawn points.
+DRONE_SPAWN_X, DRONE_SPAWN_Y = 0.0, 0.0   # PX4 default spawn (world origin)
+UGV_SPAWN_X,   UGV_SPAWN_Y   = 2.0, 0.0   # <pose>2 0 0.3 0 0 0</pose> of the 'ugv' model
+
 # ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -177,8 +185,11 @@ class PersonLocatorNode(Node):
         #   y_enu =  x_ned  (North = North)
         #   z_enu = -z_ned  (Up    = -Down)
         #
-        person_x_enu = self._drone_ned_y   # East  component
-        person_y_enu = self._drone_ned_x   # North component
+        # Drone position in the world frame = local position + drone spawn point.
+        # Position in the map frame = world position - ground robot spawn point
+        # (the map origin is the robot's start pose; both have yaw 0).
+        person_x_enu = self._drone_ned_y + DRONE_SPAWN_X - UGV_SPAWN_X   # East
+        person_y_enu = self._drone_ned_x + DRONE_SPAWN_Y - UGV_SPAWN_Y   # North
         person_z_enu = 0.0                 # Person is on the ground
 
         # ── Build and publish the PoseStamped ────────────────────────────────

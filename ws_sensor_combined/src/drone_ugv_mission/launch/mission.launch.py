@@ -7,11 +7,10 @@ Launches the full drone-UGV mission pipeline:
 
 Run AFTER:
   Terminal 1: MicroXRCE-DDS agent
-  Terminal 2: QGroundControl
-  Terminal 3: PX4 + Gazebo
-  Terminal 4: ugv_bringup.launch.py  (bridges + RSP)
-  Terminal 5: Nav2 + SLAM / AMCL
-  Terminal 6: THIS launch file
+  Terminal 2: PX4 + Gazebo
+  Terminal 3: ugv_bringup.launch.py  (bridges + RSP)
+  Terminal 4: Nav2 + SLAM / AMCL
+  Terminal 5: THIS launch file
 
 Usage:
   ros2 launch drone_ugv_mission mission.launch.py

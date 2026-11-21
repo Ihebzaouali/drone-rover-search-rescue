@@ -16,9 +16,6 @@ setup(
         # Install all launch files
         (os.path.join('share', package_name, 'launch'),
             glob('launch/*.py')),
-        # Install config files (e.g. mission_config.yaml)
-        (os.path.join('share', package_name, 'config'),
-            glob('config/*.yaml')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
